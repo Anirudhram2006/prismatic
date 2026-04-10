@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import json
@@ -16,10 +17,18 @@ except ImportError:
 BASE_DIR = os.path.dirname(__file__)
 FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend"))
 OUTPUT_FILE = os.path.join(BASE_DIR, "output.json")
+=======
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import json, os
+from simulation import simulate
+from twin import build_twin
+>>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
 
 app = Flask(__name__)
 CORS(app)
 
+<<<<<<< HEAD
 
 def _frontend_file(filename: str):
     return send_from_directory(FRONTEND_DIR, filename)
@@ -38,6 +47,14 @@ def frontend_assets(filename: str):
 @app.route("/health", methods=["GET"])
 def health():
     return jsonify({"status": "ok", "message": "TwinShield API running"})
+=======
+OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "output.json")
+
+
+@app.route("/", methods=["GET"])
+def health():
+    return jsonify({"status": "ok", "message": "SmokeStack API running 🔥"})
+>>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
 
 
 @app.route("/predict", methods=["POST"])
@@ -46,6 +63,7 @@ def predict():
     if not alert:
         return jsonify({"error": "No JSON body provided"}), 400
 
+<<<<<<< HEAD
     twin = build_twin()
     result = simulate(alert, twin)
 
@@ -65,12 +83,20 @@ def simulate_route():
         result = simulate_stage(stage, incident_type=incident_type)
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
+=======
+    twin  = build_twin()
+    result = simulate(alert, twin)
+
+    with open(OUTPUT_FILE, "w") as f:
+        json.dump(result, f, indent=2)
+>>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
 
     return jsonify(result)
 
 
 @app.route("/twin", methods=["GET"])
 def get_twin():
+<<<<<<< HEAD
     return jsonify(build_twin())
 
 
@@ -84,5 +110,11 @@ def get_simulation_stages():
     return jsonify({"stages": get_stage_sequence()})
 
 
+=======
+    """Return the full Digital Twin graph (handy for frontend visualisation)."""
+    return jsonify(build_twin())
+
+
+>>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
