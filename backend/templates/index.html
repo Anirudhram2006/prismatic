@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TwinShield</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">Predictive Cyber Defense with Digital Twin Intelligence</div>
+        <h1>TwinShield</h1>
+      </div>
+      <div class="topbar-actions">
+        <span class="status-pill">System Monitoring Active</span>
+        <button id="runAnalysisBtn" class="btn btn-primary">Run Live Analysis</button>
+        <button id="storyModeBtn" class="btn btn-secondary">Open Story Mode</button>
+        <button id="simplifyBtn" class="btn btn-ghost">Simplify All</button>
+      </div>
+    </header>
+
+    <section class="hero-card">
+      <div class="hero-copy">
+        <p class="eyebrow">Demo Environment</p>
+        <h2>Security Snapshot</h2>
+        <p class="hero-text">TwinShield turns suspicious behavior into a clear incident story, predicts what could happen next, and helps you act before the attack spreads.</p>
+      </div>
+      <div class="hero-badges">
+        <div class="signal-card">
+          <span class="signal-label">Demo Mode</span>
+          <strong>Compromised Employee Account</strong>
+          <p>Guided scenario with simulated live updates</p>
+        </div>
+      </div>
+    </section>
+
+    <main class="dashboard-grid">
+      <section class="panel panel-summary">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">A quick view of what matters most right now.</p>
+            <h3>Security Snapshot</h3>
+          </div>
+        </div>
+        <div id="summaryCards" class="summary-grid"></div>
+      </section>
+
+      <section class="panel panel-control">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Choose a scenario and let TwinShield walk the path.</p>
+            <h3>Control Panel</h3>
+          </div>
+        </div>
+        <div class="control-stack">
+          <label class="control-label" for="scenarioSelect">Demo Scenario</label>
+          <select id="scenarioSelect" class="input">
+            <option value="suspicious_login">Compromised Employee Account</option>
+            <option value="lateral_movement">Internal Movement Detected</option>
+            <option value="privilege_escalation">Admin Control Attempt</option>
+          </select>
+          <p class="helper-text">Replay this incident to walk judges through each stage step by step.</p>
+          <div class="button-row">
+            <button id="replayBtn" class="btn btn-secondary">Replay Scenario</button>
+            <button id="resetBtn" class="btn btn-ghost">Reset Demo</button>
+          </div>
+          <div id="loadingState" class="info-banner" hidden>Scanning live activity...</div>
+          <div id="errorState" class="error-banner" hidden>We could not complete the simulation. Please try again.</div>
+        </div>
+      </section>
+
+      <section class="panel panel-journey">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Follow the threat like a path through your environment.</p>
+            <h3>Attack Journey</h3>
+          </div>
+        </div>
+        <div id="journeyTimeline" class="journey-list"></div>
+      </section>
+
+      <section class="panel panel-simulation">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">We test attacker options safely before they happen in real life.</p>
+            <h3>Digital Twin Simulation</h3>
+          </div>
+        </div>
+        <div id="simulationMetrics" class="metric-grid"></div>
+      </section>
+
+      <section class="panel panel-predictions">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Predictions ranked by likelihood and potential impact.</p>
+            <h3>What Could Happen Next</h3>
+          </div>
+        </div>
+        <div id="predictionCards" class="prediction-list"></div>
+      </section>
+
+      <section class="panel panel-story">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">A human-friendly explanation of the incident.</p>
+            <h3>Story Mode</h3>
+          </div>
+        </div>
+        <div id="storyMode" class="story-layout"></div>
+      </section>
+
+      <section class="panel panel-simple">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Switch from technical security terms to plain language.</p>
+            <h3>Explain It Simply</h3>
+          </div>
+          <div class="view-toggle">
+            <button id="simpleViewBtn" class="btn btn-secondary btn-small">Simple View</button>
+            <button id="technicalViewBtn" class="btn btn-ghost btn-small">Technical View</button>
+          </div>
+        </div>
+        <div id="simplifyList" class="simple-list"></div>
+      </section>
+
+      <section class="panel panel-actions">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Start with the steps that reduce risk fastest.</p>
+            <h3>What You Should Do Now</h3>
+          </div>
+        </div>
+        <div id="actionsList" class="action-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

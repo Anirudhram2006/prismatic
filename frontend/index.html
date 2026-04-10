@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TwinShield - Guided Cyber Dashboard</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Unified Cyber Alert | Digital Twin Simulation | Guided Assistant</p>
+        <h1>TwinShield</h1>
+        <p class="hero-text">A calm, easy-to-follow security dashboard that shows how an attack may unfold, what could happen next, and what action to take first.</p>
+      </div>
+      <div class="hero-actions">
+        <span class="status-pill">Monitoring Active</span>
+        <select id="scenarioSelect" class="input">
+          <option value="suspicious_login">Compromised Employee Account</option>
+          <option value="lateral_movement">Internal Movement Detected</option>
+          <option value="privilege_escalation">Admin Control Attempt</option>
+        </select>
+        <button id="runBtn" class="btn btn-primary">Run Simulation</button>
+      </div>
+    </header>
+
+    <section class="headline-strip">
+      <div class="headline-card">
+        <span class="mini-label">Unified Notification</span>
+        <strong>Alert sent</strong>
+        <p>Suspicious behavior was detected and routed into a guided response view.</p>
+      </div>
+      <div class="headline-card">
+        <span class="mini-label">What this shows</span>
+        <strong>Attack path and likely next steps</strong>
+        <p>See the incident as a simple journey instead of reading raw security logs.</p>
+      </div>
+      <div class="headline-card">
+        <span class="mini-label">Why it matters</span>
+        <strong>Act early</strong>
+        <p>TwinShield tests possible attacker movement inside a safe digital twin first.</p>
+      </div>
+    </section>
+
+    <main class="dashboard-grid">
+      <section class="panel span-8">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Built for fast understanding</p>
+            <h2>Security Snapshot</h2>
+          </div>
+        </div>
+        <div id="snapshotCards" class="snapshot-grid"></div>
+      </section>
+
+      <section class="panel span-4">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Live demo state</p>
+            <h2>System Status</h2>
+          </div>
+        </div>
+        <div id="loadingMessage" class="info-banner" hidden>Scanning live activity...</div>
+        <div id="errorMessage" class="error-banner" hidden>We could not complete the simulation. Please try again.</div>
+        <div class="metric-stack">
+          <div class="metric-card">
+            <span class="mini-label">Action</span>
+            <strong>Run Simulation</strong>
+            <p>Starts a guided incident walkthrough and updates the dashboard.</p>
+          </div>
+          <div class="metric-card">
+            <span class="mini-label">Demo Mode</span>
+            <strong>Judge-friendly flow</strong>
+            <p>Clear language, simple visuals, and a steady presentation rhythm.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel span-8">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Gamified attack timeline</p>
+            <h2>Attack Levels</h2>
+            <p class="section-helper">Each stage appears like a level. The active level is highlighted. Future levels show where the threat may go next.</p>
+          </div>
+        </div>
+        <div id="timeline" class="timeline-grid"></div>
+      </section>
+
+      <section class="panel span-4">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Digital twin simulation</p>
+            <h2>Simulation Engine</h2>
+            <p class="section-helper">TwinShield safely tests attacker routes inside a virtual model of the environment.</p>
+          </div>
+        </div>
+        <div id="simulationSummary" class="metric-stack"></div>
+      </section>
+
+      <section class="panel span-8">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Prediction panel</p>
+            <h2>What May Happen Next</h2>
+            <p class="section-helper">Likely outcomes ranked by probability and possible impact.</p>
+          </div>
+        </div>
+        <div id="predictions" class="prediction-grid"></div>
+      </section>
+
+      <section class="panel span-4">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Story mode</p>
+            <h2>Simple Explanation</h2>
+            <p class="section-helper">A plain-language summary of the incident and why it matters.</p>
+          </div>
+        </div>
+        <div id="storyMode" class="story-stack"></div>
+      </section>
+
+      <section class="panel span-12">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Auto-generated investigation summary</p>
+            <h2>Investigation Summary</h2>
+            <p class="section-helper">A structured incident summary based on the current simulated stage.</p>
+          </div>
+        </div>
+        <div id="investigationSummary" class="snapshot-grid"></div>
+      </section>
+
+      <section class="panel span-12 chatbot-panel">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">Guided assistant</p>
+            <h2>TwinShield Assistant</h2>
+            <p class="section-helper">Ask simple questions like "What is happening?", "Is this dangerous?", or "What should I do?"</p>
+          </div>
+        </div>
+        <div class="chatbot-layout">
+          <div class="chat-suggestions">
+            <button class="suggestion-btn" data-question="What is happening?">What is happening?</button>
+            <button class="suggestion-btn" data-question="Is this dangerous?">Is this dangerous?</button>
+            <button class="suggestion-btn" data-question="What should I do?">What should I do?</button>
+            <button class="suggestion-btn" data-question="Explain in simple terms">Explain in simple terms</button>
+          </div>
+          <div class="chat-window-wrap">
+            <div id="chatWindow" class="chat-window"></div>
+            <div class="chat-input-row">
+              <input id="chatInput" class="input chat-input" type="text" placeholder="Ask about the incident in plain English">
+              <button id="sendChatBtn" class="btn btn-primary">Send</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/assets/script.js"></script>
+</body>
+</html>

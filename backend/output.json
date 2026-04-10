@@ -1,0 +1,417 @@
+{
+  "incident_type": "Suspicious Login",
+  "severity": "high",
+  "current_stage": "initial_access",
+  "current_stage_label": "Initial Access",
+  "current_stage_simple": "Suspicious Login",
+  "source_asset": "Alice's Laptop",
+  "affected_user": "alice",
+  "timestamp": "2026-04-10T11:24:41.796808Z",
+  "timeline": [
+    {
+      "time": "2026-04-10T11:24:41.796739Z",
+      "stage": "initial_access",
+      "label": "Initial Access",
+      "simple_stage": "Suspicious Login",
+      "event": "Multiple failed login attempts followed by a successful login from an unusual location.",
+      "source": "185.220.101.47",
+      "status": "detected"
+    },
+    {
+      "time": "2026-04-10T11:39:41.796739Z",
+      "stage": "execution",
+      "label": "Execution",
+      "simple_stage": "Malicious Action",
+      "event": "Deploy credential dumper",
+      "target": "dev_laptop_alice",
+      "target_label": "Alice's Laptop",
+      "status": "predicted"
+    },
+    {
+      "time": "2026-04-10T11:54:41.796739Z",
+      "stage": "persistence",
+      "label": "Persistence",
+      "simple_stage": "Trying to Stay Inside",
+      "event": "Install reverse shell backdoor",
+      "target": "dev_laptop_alice",
+      "target_label": "Alice's Laptop",
+      "status": "predicted"
+    },
+    {
+      "time": "2026-04-10T12:09:41.796739Z",
+      "stage": "privilege_escalation",
+      "label": "Privilege Escalation",
+      "simple_stage": "Admin Control Attempt",
+      "event": "Exploit local admin token",
+      "target": "srv_ad",
+      "target_label": "Active Directory",
+      "status": "predicted"
+    },
+    {
+      "time": "2026-04-10T12:24:41.796739Z",
+      "stage": "lateral_movement",
+      "label": "Lateral Movement",
+      "simple_stage": "Moving Across Systems",
+      "event": "Pass the hash to Active Directory",
+      "target": "srv_ad",
+      "target_label": "Active Directory",
+      "status": "predicted"
+    },
+    {
+      "time": "2026-04-10T12:54:41.796739Z",
+      "stage": "collection",
+      "label": "Collection",
+      "simple_stage": "Gathering Sensitive Data",
+      "event": "Stage sensitive finance data",
+      "target": "db_finance",
+      "target_label": "Finance DB",
+      "status": "predicted"
+    },
+    {
+      "time": "2026-04-10T13:24:41.796739Z",
+      "stage": "exfiltration",
+      "label": "Exfiltration",
+      "simple_stage": "Data Leaving the System",
+      "event": "Exfiltrate through encrypted command channel",
+      "target": "net_dmz",
+      "target_label": "DMZ",
+      "status": "predicted"
+    }
+  ],
+  "attack_paths": [
+    {
+      "path_id": "PATH-A",
+      "label": "Credential Harvesting -> Lateral Movement",
+      "probability": 0.72,
+      "steps": [
+        {
+          "stage": "execution",
+          "action": "Deploy credential dumper",
+          "target": "dev_laptop_alice",
+          "eta_mins": 15,
+          "target_label": "Alice's Laptop",
+          "stage_label": "Execution",
+          "stage_color": "#f97316",
+          "simple_stage": "Malicious Action",
+          "icon": "bolt"
+        },
+        {
+          "stage": "persistence",
+          "action": "Install reverse shell backdoor",
+          "target": "dev_laptop_alice",
+          "eta_mins": 30,
+          "target_label": "Alice's Laptop",
+          "stage_label": "Persistence",
+          "stage_color": "#ef4444",
+          "simple_stage": "Trying to Stay Inside",
+          "icon": "anchor"
+        },
+        {
+          "stage": "privilege_escalation",
+          "action": "Exploit local admin token",
+          "target": "srv_ad",
+          "eta_mins": 45,
+          "target_label": "Active Directory",
+          "stage_label": "Privilege Escalation",
+          "stage_color": "#dc2626",
+          "simple_stage": "Admin Control Attempt",
+          "icon": "shield"
+        },
+        {
+          "stage": "lateral_movement",
+          "action": "Pass the hash to Active Directory",
+          "target": "srv_ad",
+          "eta_mins": 60,
+          "target_label": "Active Directory",
+          "stage_label": "Lateral Movement",
+          "stage_color": "#b91c1c",
+          "simple_stage": "Moving Across Systems",
+          "icon": "route"
+        },
+        {
+          "stage": "collection",
+          "action": "Stage sensitive finance data",
+          "target": "db_finance",
+          "eta_mins": 90,
+          "target_label": "Finance DB",
+          "stage_label": "Collection",
+          "stage_color": "#991b1b",
+          "simple_stage": "Gathering Sensitive Data",
+          "icon": "database"
+        },
+        {
+          "stage": "exfiltration",
+          "action": "Exfiltrate through encrypted command channel",
+          "target": "net_dmz",
+          "eta_mins": 120,
+          "target_label": "DMZ",
+          "stage_label": "Exfiltration",
+          "stage_color": "#7f1d1d",
+          "simple_stage": "Data Leaving the System",
+          "icon": "upload"
+        }
+      ]
+    },
+    {
+      "path_id": "PATH-B",
+      "label": "Phishing Pivot -> Web Server Compromise",
+      "probability": 0.55,
+      "steps": [
+        {
+          "stage": "execution",
+          "action": "Run malicious macro or dropper",
+          "target": "dev_laptop_bob",
+          "eta_mins": 20,
+          "target_label": "Bob's Laptop",
+          "stage_label": "Execution",
+          "stage_color": "#f97316",
+          "simple_stage": "Malicious Action",
+          "icon": "bolt"
+        },
+        {
+          "stage": "persistence",
+          "action": "Create scheduled task for persistence",
+          "target": "dev_laptop_bob",
+          "eta_mins": 35,
+          "target_label": "Bob's Laptop",
+          "stage_label": "Persistence",
+          "stage_color": "#ef4444",
+          "simple_stage": "Trying to Stay Inside",
+          "icon": "anchor"
+        },
+        {
+          "stage": "lateral_movement",
+          "action": "Pivot to web server with reused credentials",
+          "target": "srv_web",
+          "eta_mins": 50,
+          "target_label": "Web Server",
+          "stage_label": "Lateral Movement",
+          "stage_color": "#b91c1c",
+          "simple_stage": "Moving Across Systems",
+          "icon": "route"
+        },
+        {
+          "stage": "collection",
+          "action": "Harvest customer database credentials",
+          "target": "db_customer",
+          "eta_mins": 80,
+          "target_label": "Customer DB",
+          "stage_label": "Collection",
+          "stage_color": "#991b1b",
+          "simple_stage": "Gathering Sensitive Data",
+          "icon": "database"
+        },
+        {
+          "stage": "exfiltration",
+          "action": "Bulk export customer records",
+          "target": "db_customer",
+          "eta_mins": 100,
+          "target_label": "Customer DB",
+          "stage_label": "Exfiltration",
+          "stage_color": "#7f1d1d",
+          "simple_stage": "Data Leaving the System",
+          "icon": "upload"
+        }
+      ]
+    },
+    {
+      "path_id": "PATH-C",
+      "label": "Stealth Persistence -> Finance DB Theft",
+      "probability": 0.38,
+      "steps": [
+        {
+          "stage": "persistence",
+          "action": "Implant memory injector",
+          "target": "dev_workstation",
+          "eta_mins": 25,
+          "target_label": "Finance Workstation",
+          "stage_label": "Persistence",
+          "stage_color": "#ef4444",
+          "simple_stage": "Trying to Stay Inside",
+          "icon": "anchor"
+        },
+        {
+          "stage": "privilege_escalation",
+          "action": "Exploit local privilege weakness",
+          "target": "dev_workstation",
+          "eta_mins": 40,
+          "target_label": "Finance Workstation",
+          "stage_label": "Privilege Escalation",
+          "stage_color": "#dc2626",
+          "simple_stage": "Admin Control Attempt",
+          "icon": "shield"
+        },
+        {
+          "stage": "lateral_movement",
+          "action": "Move to finance workstation",
+          "target": "dev_workstation",
+          "eta_mins": 55,
+          "target_label": "Finance Workstation",
+          "stage_label": "Lateral Movement",
+          "stage_color": "#b91c1c",
+          "simple_stage": "Moving Across Systems",
+          "icon": "route"
+        },
+        {
+          "stage": "collection",
+          "action": "Stage finance records to temp storage",
+          "target": "db_finance",
+          "eta_mins": 85,
+          "target_label": "Finance DB",
+          "stage_label": "Collection",
+          "stage_color": "#991b1b",
+          "simple_stage": "Gathering Sensitive Data",
+          "icon": "database"
+        },
+        {
+          "stage": "exfiltration",
+          "action": "Exfiltrate through DNS tunneling",
+          "target": "net_dmz",
+          "eta_mins": 110,
+          "target_label": "DMZ",
+          "stage_label": "Exfiltration",
+          "stage_color": "#7f1d1d",
+          "simple_stage": "Data Leaving the System",
+          "icon": "upload"
+        }
+      ]
+    }
+  ],
+  "predictions": [
+    {
+      "title": "Malicious Action",
+      "technical_title": "Credential Harvesting -> Lateral Movement",
+      "probability": 0.72,
+      "impact": "Critical",
+      "time_window": "Within 15 minutes",
+      "description": "The attacker may target Alice's Laptop next.",
+      "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
+      "next_action": "Review activity around Alice's Laptop and prepare containment."
+    },
+    {
+      "title": "Malicious Action",
+      "technical_title": "Phishing Pivot -> Web Server Compromise",
+      "probability": 0.55,
+      "impact": "High",
+      "time_window": "Within 20 minutes",
+      "description": "The attacker may target Bob's Laptop next.",
+      "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
+      "next_action": "Review activity around Bob's Laptop and prepare containment."
+    },
+    {
+      "title": "Trying to Stay Inside",
+      "technical_title": "Stealth Persistence -> Finance DB Theft",
+      "probability": 0.38,
+      "impact": "Medium",
+      "time_window": "Within 25 minutes",
+      "description": "The attacker may target Finance Workstation next.",
+      "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
+      "next_action": "Review activity around Finance Workstation and prepare containment."
+    }
+  ],
+  "prediction_cards": [
+    {
+      "title": "Malicious Action",
+      "technical_title": "Credential Harvesting -> Lateral Movement",
+      "probability": 0.72,
+      "impact": "Critical",
+      "time_window": "Within 15 minutes",
+      "description": "The attacker may target Alice's Laptop next.",
+      "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
+      "next_action": "Review activity around Alice's Laptop and prepare containment."
+    },
+    {
+      "title": "Malicious Action",
+      "technical_title": "Phishing Pivot -> Web Server Compromise",
+      "probability": 0.55,
+      "impact": "High",
+      "time_window": "Within 20 minutes",
+      "description": "The attacker may target Bob's Laptop next.",
+      "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
+      "next_action": "Review activity around Bob's Laptop and prepare containment."
+    },
+    {
+      "title": "Trying to Stay Inside",
+      "technical_title": "Stealth Persistence -> Finance DB Theft",
+      "probability": 0.38,
+      "impact": "Medium",
+      "time_window": "Within 25 minutes",
+      "description": "The attacker may target Finance Workstation next.",
+      "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
+      "next_action": "Review activity around Finance Workstation and prepare containment."
+    }
+  ],
+  "explanation": "TwinShield detected suspicious login behavior. The most likely next route is Credential Harvesting -> Lateral Movement with a 72% likelihood. The first follow-up move could happen in about 15 minutes, so early action matters.",
+  "plain_english": "TwinShield detected suspicious login behavior. The most likely next route is Credential Harvesting -> Lateral Movement with a 72% likelihood. The first follow-up move could happen in about 15 minutes, so early action matters.",
+  "story_mode": {
+    "headline": "Here is the incident in plain language.",
+    "narrative": "An unusual event involving Alice was detected on Alice's Laptop. TwinShield believes this incident is in the suspicious login phase. The attacker may next attempt malicious action against Alice's Laptop in about 15 minutes. If that succeeds, the path could continue toward trying to stay inside.",
+    "chapters": [
+      {
+        "title": "How it started",
+        "text": "Multiple failed login attempts followed by a successful login from an unusual location."
+      },
+      {
+        "title": "What we are seeing now",
+        "text": "TwinShield believes this incident is in the suspicious login phase."
+      },
+      {
+        "title": "What may happen next",
+        "text": "The attacker may next attempt malicious action against Alice's Laptop in about 15 minutes."
+      },
+      {
+        "title": "Why it matters",
+        "text": "If that succeeds, the path could continue toward trying to stay inside."
+      }
+    ]
+  },
+  "simplified_terms": [
+    {
+      "term": "Initial Access",
+      "plain_english": "Suspicious Login",
+      "analogy": "Like someone getting through the front door with a suspicious badge swipe."
+    },
+    {
+      "term": "Execution",
+      "plain_english": "Malicious Action",
+      "analogy": "Like a hidden tool being unpacked after someone gets inside."
+    },
+    {
+      "term": "Persistence",
+      "plain_english": "Trying to Stay Inside",
+      "analogy": "Like leaving a spare key behind so they can return later."
+    },
+    {
+      "term": "Privilege Escalation",
+      "plain_english": "Admin Control Attempt",
+      "analogy": "Like trying to upgrade from a visitor pass to a master key."
+    },
+    {
+      "term": "Lateral Movement",
+      "plain_english": "Moving Across Systems",
+      "analogy": "Like moving room to room inside a building after getting in."
+    },
+    {
+      "term": "Collection",
+      "plain_english": "Gathering Sensitive Data",
+      "analogy": "Like pulling files together before taking them out."
+    },
+    {
+      "term": "Exfiltration",
+      "plain_english": "Data Leaving the System",
+      "analogy": "Like carrying documents out of the building."
+    }
+  ],
+  "recommended_actions": [
+    "Isolate the affected device from the network immediately.",
+    "Reset credentials for all accounts that accessed this device.",
+    "Enable MFA on all privileged accounts if not already active."
+  ],
+  "simulation_summary": {
+    "paths_tested": 3,
+    "high_risk_paths": 2,
+    "confidence_score": 84,
+    "time_to_next_move": 15,
+    "assets_modeled": 15
+  }
+}

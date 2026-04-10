@@ -1,0 +1,19 @@
+{
+  "users": [
+    { "username": "admin", "role": "high_privilege", "assigned_system": "identity_server" },
+    { "username": "employee", "role": "standard_user", "assigned_system": "sales_workstation" },
+    { "username": "finance_user", "role": "standard_user", "assigned_system": "finance_workstation" }
+  ],
+  "systems": [
+    { "id": "identity_server", "type": "server", "label": "Identity Server", "sensitivity": "high" },
+    { "id": "sales_workstation", "type": "workstation", "label": "Sales Workstation", "sensitivity": "medium" },
+    { "id": "finance_workstation", "type": "workstation", "label": "Finance Workstation", "sensitivity": "high" },
+    { "id": "customer_db", "type": "database", "label": "Customer Data Store", "sensitivity": "high" },
+    { "id": "finance_db", "type": "database", "label": "Financial Records Store", "sensitivity": "critical" }
+  ],
+  "sensitive_data": [
+    { "type": "customer_data", "importance": "high", "system_id": "customer_db" },
+    { "type": "financial_records", "importance": "critical", "system_id": "finance_db" },
+    { "type": "identity_profiles", "importance": "high", "system_id": "identity_server" }
+  ]
+}
