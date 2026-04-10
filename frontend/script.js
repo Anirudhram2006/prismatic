@@ -13,6 +13,15 @@ const chatWindow = document.getElementById("chatWindow");
 const chatInput = document.getElementById("chatInput");
 const sendChatBtn = document.getElementById("sendChatBtn");
 
+const sceneTitle = document.getElementById("sceneTitle");
+const sceneNarrative = document.getElementById("sceneNarrative");
+const sceneStageCode = document.getElementById("sceneStageCode");
+const liveFeed = document.getElementById("liveFeed");
+const riskMeterFill = document.getElementById("riskMeterFill");
+const riskMeterLabel = document.getElementById("riskMeterLabel");
+const riskMeterScore = document.getElementById("riskMeterScore");
+const simulationPulse = document.getElementById("simulationPulse");
+
 const STAGE_SEQUENCE = [
   "suspicious_login",
   "malicious_execution",
@@ -24,13 +33,13 @@ const STAGE_SEQUENCE = [
 ];
 
 const STAGE_VISUALS = {
-  suspicious_login: { icon: "SL", hint: "A login happened in a risky way." },
-  malicious_execution: { icon: "ME", hint: "A suspicious action may be running." },
-  persistence: { icon: "PA", hint: "Someone may be trying to stay inside." },
-  privilege_escalation: { icon: "PE", hint: "The path may move toward higher access." },
-  lateral_movement: { icon: "LM", hint: "The incident may spread to nearby systems." },
-  data_access: { icon: "DA", hint: "Sensitive information may now be reachable." },
-  data_exfiltration: { icon: "DE", hint: "Important data could leave the environment." },
+  suspicious_login: { icon: "SL", hint: "A login happened in a risky way.", code: "SL", alert: "Credential use pattern changed", route: "Identity path exposed" },
+  malicious_execution: { icon: "ME", hint: "A suspicious action may be running.", code: "ME", alert: "Potential tool execution detected", route: "Endpoint behavior changed" },
+  persistence: { icon: "PA", hint: "Someone may be trying to stay inside.", code: "PA", alert: "Longer-term presence simulated", route: "Return path being prepared" },
+  privilege_escalation: { icon: "PE", hint: "The path may move toward higher access.", code: "PE", alert: "Access level rising in simulation", route: "Privilege boundary under pressure" },
+  lateral_movement: { icon: "LM", hint: "The incident may spread to nearby systems.", code: "LM", alert: "Connected systems now reachable", route: "Internal route expansion detected" },
+  data_access: { icon: "DA", hint: "Sensitive information may now be reachable.", code: "DA", alert: "Potential access to sensitive data", route: "Data layer now in range" },
+  data_exfiltration: { icon: "DE", hint: "Important data could leave the environment.", code: "DE", alert: "Exposure path near completion", route: "Outbound risk path created" },
 };
 
 const SCENARIOS = {
@@ -38,24 +47,23 @@ const SCENARIOS = {
     incident_type: "Account Compromise",
     root_cause: "Suspicious login",
     stages: STAGE_SEQUENCE,
-    intro: "Suspicious login signals were grouped into one account compromise incident.",
+    intro: "TwinShield is constructing a safe simulation from the first suspicious login signal.",
   },
   lateral_movement: {
     incident_type: "Account Compromise",
     root_cause: "Suspicious login with later system movement",
     stages: ["suspicious_login", "malicious_execution", "persistence", "privilege_escalation", "lateral_movement", "data_access"],
-    intro: "TwinShield is simulating an incident that has already started moving across systems.",
+    intro: "TwinShield is constructing a simulation where the incident has already started spreading across systems.",
   },
   privilege_escalation: {
     incident_type: "Account Compromise",
     root_cause: "Suspicious login followed by access expansion",
     stages: ["suspicious_login", "malicious_execution", "persistence", "privilege_escalation", "lateral_movement", "data_access", "data_exfiltration"],
-    intro: "TwinShield is simulating a path where a compromised account may try to gain stronger access.",
+    intro: "TwinShield is constructing a high-risk simulation where stronger access is being pursued.",
   },
 };
 
 const state = {
-  simulation: null,
   latestSimulationStep: null,
   isRunning: false,
 };
@@ -74,22 +82,26 @@ function formatPercent(value) {
   return `${Math.round(value * 100)}%`;
 }
 
+function stageLabel(stageKey) {
+  return stageKey.replaceAll("_", " ");
+}
+
 function renderSnapshot(stepData) {
   const cards = [
     {
       label: "Current Risk",
       value: stepData.security_snapshot.current_risk,
-      text: "This is the current level of simulated risk in the virtual environment.",
+      text: "Current level of simulated exposure inside the digital twin.",
     },
     {
       label: "Current Stage",
       value: stepData.security_snapshot.current_stage,
-      text: "This is the active point in the incident journey.",
+      text: "The live stage TwinShield is actively constructing.",
     },
     {
       label: "Likely Next Move",
       value: stepData.security_snapshot.likely_next_move,
-      text: "This is the next step TwinShield believes is most likely.",
+      text: "Most likely continuation based on the tested paths.",
     },
     {
       label: "Best First Action",
@@ -117,17 +129,15 @@ function renderTimeline(stepData) {
   timeline.innerHTML = STAGE_SEQUENCE.map((stageKey) => {
     const visual = STAGE_VISUALS[stageKey];
     const level = levelMap.get(stageKey);
-    const title = level ? level.title : stageKey;
+    const title = level ? level.title : stageLabel(stageKey);
     const description = level ? level.simple_explanation : visual.hint;
     const status = level ? level.status : "Waiting";
-    const risk = level ? level.risk_indicator : "Low";
+    const risk = level ? level.risk_indicator : "Pending";
     const classes = [
       "timeline-card",
       status === "Active" ? "current" : "",
-      status === "Waiting" ? "" : "predicted",
-    ]
-      .filter(Boolean)
-      .join(" ");
+      status !== "Waiting" ? "predicted" : "",
+    ].filter(Boolean).join(" ");
 
     return `
       <article class="${classes}">
@@ -152,7 +162,7 @@ function renderPredictions(stepData) {
           <div class="probability-bar" aria-hidden="true">
             <div class="probability-fill" style="width: ${formatPercent(prediction.probability)};"></div>
           </div>
-          <p><strong>${formatPercent(prediction.probability)} likely.</strong> Simulation indicates this is a high-interest path.</p>
+          <p><strong>${formatPercent(prediction.probability)} likely.</strong> Simulation indicates this path is worth close attention.</p>
           <p><strong>Suggested response:</strong> ${stepData.security_snapshot.best_first_action}</p>
         </article>
       `
@@ -174,7 +184,7 @@ function renderSimulationSummary(stepData) {
         <article class="metric-card">
           <span class="mini-label">${label}</span>
           <strong>${value}</strong>
-          <p>TwinShield updates these values as the simulation moves forward.</p>
+          <p>Updated as each stage is constructed and tested.</p>
         </article>
       `
     )
@@ -185,12 +195,12 @@ function renderStory(stepData) {
   storyMode.innerHTML = `
     <article class="story-card">
       <span class="mini-label">Narrative</span>
-      <h3>Safe simulation in progress</h3>
+      <h3>Simulation in progress</h3>
       <p>${stepData.story}</p>
     </article>
     <article class="story-card">
       <span class="mini-label">Unified alert</span>
-      <p>Suspicious login + unusual account activity + risky path expansion were grouped into one incident.</p>
+      <p>Suspicious login, unusual account activity, and route expansion signals were grouped into one guided incident path.</p>
     </article>
     <article class="story-card">
       <span class="mini-label">Current effect</span>
@@ -220,6 +230,37 @@ function renderInvestigationSummary(stepData) {
       `
     )
     .join("");
+}
+
+function renderSimulationScene(stepData) {
+  const visual = STAGE_VISUALS[stepData.stage];
+  sceneTitle.textContent = `${stepData.stage_label} simulation active`;
+  sceneNarrative.textContent = stepData.story;
+  sceneStageCode.textContent = visual.code;
+
+  liveFeed.innerHTML = `
+    <article class="feed-item">
+      <span class="mini-label">Constructed Signal</span>
+      <strong>${visual.alert}</strong>
+      <p>${stepData.effect}</p>
+    </article>
+    <article class="feed-item">
+      <span class="mini-label">Route Status</span>
+      <strong>${visual.route}</strong>
+      <p>Next likely move: ${stepData.next_step_label}</p>
+    </article>
+    <article class="feed-item">
+      <span class="mini-label">Affected Systems</span>
+      <strong>${stepData.affected_systems.join(", ")}</strong>
+      <p>These systems are currently inside the simulated risk path.</p>
+    </article>
+  `;
+
+  const width = Math.max(12, Math.min(stepData.risk_score * 10, 98));
+  riskMeterFill.style.width = `${width}%`;
+  riskMeterLabel.textContent = `${stepData.risk_level} Risk`;
+  riskMeterScore.textContent = `${stepData.risk_score.toFixed(1)} / 10`;
+  simulationPulse.textContent = `${stepData.impact} Confidence is ${stepData.confidence}% for the current projected route.`;
 }
 
 function addMessage(role, text) {
@@ -303,7 +344,7 @@ function renderInitialState() {
   timeline.innerHTML = STAGE_SEQUENCE.map((stageKey) => `
     <article class="timeline-card">
       <div class="stage-icon">${STAGE_VISUALS[stageKey].icon}</div>
-      <h3>${stageKey.replaceAll("_", " ")}</h3>
+      <h3>${stageLabel(stageKey)}</h3>
       <p>${STAGE_VISUALS[stageKey].hint}</p>
       <div class="timeline-status">Waiting</div>
       <p><strong>Risk:</strong> Pending</p>
@@ -313,7 +354,7 @@ function renderInitialState() {
   predictions.innerHTML = `
     <article class="prediction-card">
       <h3>No predictions yet</h3>
-      <p>Run the simulation to see how the virtual incident may progress.</p>
+      <p>Run the simulation to see how the virtual incident may progress through the environment.</p>
     </article>
   `;
 
@@ -342,6 +383,31 @@ function renderInitialState() {
       <div class="snapshot-value">Waiting for simulation</div>
     </article>
   `;
+
+  sceneTitle.textContent = "Awaiting simulation start";
+  sceneNarrative.textContent = "TwinShield will correlate suspicious signals, construct an attack path, and project likely movement through the virtual environment.";
+  sceneStageCode.textContent = "TS";
+  liveFeed.innerHTML = `
+    <article class="feed-item">
+      <span class="mini-label">Constructed Signal</span>
+      <strong>Idle</strong>
+      <p>No incident path is being constructed yet.</p>
+    </article>
+    <article class="feed-item">
+      <span class="mini-label">Route Status</span>
+      <strong>Standby</strong>
+      <p>The digital twin is ready to test possible attacker paths.</p>
+    </article>
+    <article class="feed-item">
+      <span class="mini-label">Affected Systems</span>
+      <strong>None</strong>
+      <p>Systems will appear here once a simulation stage is active.</p>
+    </article>
+  `;
+  riskMeterFill.style.width = "0%";
+  riskMeterLabel.textContent = "Waiting";
+  riskMeterScore.textContent = "0.0 / 10";
+  simulationPulse.textContent = "No simulation activity yet.";
 
   chatWindow.innerHTML = "";
   addMessage("assistant", "Hello. I can explain this safe simulation in plain English. Run the simulation and ask me what is happening, whether it is dangerous, or what to do next.");
@@ -376,6 +442,7 @@ function renderSimulationStep(stepData) {
   renderSimulationSummary(stepData);
   renderStory(stepData);
   renderInvestigationSummary(stepData);
+  renderSimulationScene(stepData);
 }
 
 async function runSimulation() {
@@ -392,11 +459,11 @@ async function runSimulation() {
 
   try {
     for (const stage of scenario.stages) {
-      setLoading(`Simulating ${stage.replaceAll("_", " ")} in the virtual environment...`, true);
+      setLoading(`Constructing ${stageLabel(stage)} in the virtual environment...`, true);
       const stepData = await fetchSimulationStep(stage, scenario);
       renderSimulationStep(stepData);
       addMessage("assistant", stepData.story);
-      await delay(850);
+      await delay(900);
     }
 
     setLoading("Simulation complete. Final prediction is ready.", true);

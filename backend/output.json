@@ -1,574 +1,204 @@
 {
-  "incident_type": "Suspicious Login",
-  "severity": "high",
-  "current_stage": "initial_access",
-  "current_stage_label": "Initial Access",
-<<<<<<< HEAD
-  "current_stage_simple": "Suspicious Login",
-  "source_asset": "Alice's Laptop",
-  "affected_user": "alice",
-  "timestamp": "2026-04-10T11:24:41.796808Z",
+  "incident_type": "Lateral Movement Alert",
+  "severity": "critical",
+  "current_stage": "lateral_movement",
+  "current_stage_label": "Lateral Movement",
+  "current_stage_simple": "Moving Across Systems",
+  "source_asset": "App Server",
+  "affected_user": "service-app",
+  "timestamp": "2026-04-10T14:09:46.493502Z",
   "timeline": [
     {
-      "time": "2026-04-10T11:24:41.796739Z",
-      "stage": "initial_access",
-      "label": "Initial Access",
-      "simple_stage": "Suspicious Login",
-      "event": "Multiple failed login attempts followed by a successful login from an unusual location.",
-      "source": "185.220.101.47",
-      "status": "detected"
-    },
-    {
-      "time": "2026-04-10T11:39:41.796739Z",
-      "stage": "execution",
-      "label": "Execution",
-      "simple_stage": "Malicious Action",
-      "event": "Deploy credential dumper",
-      "target": "dev_laptop_alice",
-      "target_label": "Alice's Laptop",
-      "status": "predicted"
-    },
-    {
-      "time": "2026-04-10T11:54:41.796739Z",
-      "stage": "persistence",
-      "label": "Persistence",
-      "simple_stage": "Trying to Stay Inside",
-      "event": "Install reverse shell backdoor",
-      "target": "dev_laptop_alice",
-      "target_label": "Alice's Laptop",
-      "status": "predicted"
-    },
-    {
-      "time": "2026-04-10T12:09:41.796739Z",
-      "stage": "privilege_escalation",
-      "label": "Privilege Escalation",
-      "simple_stage": "Admin Control Attempt",
-      "event": "Exploit local admin token",
-      "target": "srv_ad",
-      "target_label": "Active Directory",
-      "status": "predicted"
-    },
-    {
-      "time": "2026-04-10T12:24:41.796739Z",
+      "time": "2026-04-10T14:09:46.493413Z",
       "stage": "lateral_movement",
       "label": "Lateral Movement",
       "simple_stage": "Moving Across Systems",
-      "event": "Pass the hash to Active Directory",
+      "event": "An internal account attempted remote access across multiple servers in quick succession.",
+      "source": "10.0.1.21",
+      "status": "detected"
+    },
+    {
+      "time": "2026-04-10T14:19:46.493413Z",
+      "stage": "privilege_escalation",
+      "label": "Privilege Escalation",
+      "simple_stage": "Admin Control Attempt",
+      "event": "Dump domain hashes with directory sync abuse",
       "target": "srv_ad",
       "target_label": "Active Directory",
       "status": "predicted"
     },
     {
-      "time": "2026-04-10T12:54:41.796739Z",
+      "time": "2026-04-10T14:39:46.493413Z",
       "stage": "collection",
       "label": "Collection",
       "simple_stage": "Gathering Sensitive Data",
-      "event": "Stage sensitive finance data",
+      "event": "Access file shares and sensitive databases",
       "target": "db_finance",
       "target_label": "Finance DB",
       "status": "predicted"
     },
     {
-      "time": "2026-04-10T13:24:41.796739Z",
+      "time": "2026-04-10T15:09:46.493413Z",
       "stage": "exfiltration",
       "label": "Exfiltration",
       "simple_stage": "Data Leaving the System",
-      "event": "Exfiltrate through encrypted command channel",
+      "event": "Mass exfiltrate to external storage",
       "target": "net_dmz",
       "target_label": "DMZ",
       "status": "predicted"
-=======
-  "source_asset": "dev_laptop_alice",
-  "affected_user": "alice",
-  "timestamp": "2026-04-10T06:43:35.492638Z",
-  "timeline": [
-    {
-      "time": "2026-04-10T06:43:35.492574Z",
-      "stage": "initial_access",
-      "label": "Initial Access",
-      "event": "Multiple failed login attempts followed by successful login from unusual location",
-      "source": "185.220.101.47"
-    },
-    {
-      "time": "2026-04-10T06:58:35.492574Z",
-      "stage": "execution",
-      "label": "Execution",
-      "event": "Deploy credential dumper (Mimikatz-style)",
-      "target": "dev_laptop_alice"
-    },
-    {
-      "time": "2026-04-10T07:13:35.492574Z",
-      "stage": "persistence",
-      "label": "Persistence",
-      "event": "Install reverse shell backdoor",
-      "target": "dev_laptop_alice"
-    },
-    {
-      "time": "2026-04-10T07:28:35.492574Z",
-      "stage": "privilege_escalation",
-      "label": "Privilege Escalation",
-      "event": "Exploit local admin token",
-      "target": "srv_ad"
-    },
-    {
-      "time": "2026-04-10T07:43:35.492574Z",
-      "stage": "lateral_movement",
-      "label": "Lateral Movement",
-      "event": "Pass-the-Hash to Active Directory",
-      "target": "srv_ad"
-    },
-    {
-      "time": "2026-04-10T08:13:35.492574Z",
-      "stage": "collection",
-      "label": "Collection",
-      "event": "Enumerate and stage sensitive data",
-      "target": "db_finance"
-    },
-    {
-      "time": "2026-04-10T08:43:35.492574Z",
-      "stage": "exfiltration",
-      "label": "Exfiltration",
-      "event": "Exfiltrate via encrypted C2 channel",
-      "target": "net_dmz"
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
     }
   ],
   "attack_paths": [
     {
       "path_id": "PATH-A",
-<<<<<<< HEAD
-      "label": "Credential Harvesting -> Lateral Movement",
-=======
-      "label": "Credential Harvesting \u2192 Lateral Movement",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-      "probability": 0.72,
+      "label": "AD Compromise -> Full Domain Takeover",
+      "probability": 0.8,
       "steps": [
         {
-          "stage": "execution",
-<<<<<<< HEAD
-          "action": "Deploy credential dumper",
-=======
-          "action": "Deploy credential dumper (Mimikatz-style)",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "dev_laptop_alice",
-          "eta_mins": 15,
-          "target_label": "Alice's Laptop",
-          "stage_label": "Execution",
-<<<<<<< HEAD
-          "stage_color": "#f97316",
-          "simple_stage": "Malicious Action",
-          "icon": "bolt"
-=======
-          "stage_color": "#f97316"
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-        },
-        {
-          "stage": "persistence",
-          "action": "Install reverse shell backdoor",
-          "target": "dev_laptop_alice",
-          "eta_mins": 30,
-          "target_label": "Alice's Laptop",
-          "stage_label": "Persistence",
-<<<<<<< HEAD
-          "stage_color": "#ef4444",
-          "simple_stage": "Trying to Stay Inside",
-          "icon": "anchor"
-=======
-          "stage_color": "#ef4444"
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-        },
-        {
           "stage": "privilege_escalation",
-          "action": "Exploit local admin token",
+          "action": "Dump domain hashes with directory sync abuse",
           "target": "srv_ad",
-          "eta_mins": 45,
+          "eta_mins": 10,
           "target_label": "Active Directory",
           "stage_label": "Privilege Escalation",
-<<<<<<< HEAD
           "stage_color": "#dc2626",
           "simple_stage": "Admin Control Attempt",
           "icon": "shield"
         },
         {
-          "stage": "lateral_movement",
-          "action": "Pass the hash to Active Directory",
-=======
-          "stage_color": "#dc2626"
-        },
-        {
-          "stage": "lateral_movement",
-          "action": "Pass-the-Hash to Active Directory",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "srv_ad",
-          "eta_mins": 60,
-          "target_label": "Active Directory",
-          "stage_label": "Lateral Movement",
-<<<<<<< HEAD
-          "stage_color": "#b91c1c",
-          "simple_stage": "Moving Across Systems",
-          "icon": "route"
-        },
-        {
           "stage": "collection",
-          "action": "Stage sensitive finance data",
-=======
-          "stage_color": "#b91c1c"
-        },
-        {
-          "stage": "collection",
-          "action": "Enumerate and stage sensitive data",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
+          "action": "Access file shares and sensitive databases",
           "target": "db_finance",
-          "eta_mins": 90,
+          "eta_mins": 30,
           "target_label": "Finance DB",
           "stage_label": "Collection",
-<<<<<<< HEAD
           "stage_color": "#991b1b",
           "simple_stage": "Gathering Sensitive Data",
           "icon": "database"
         },
         {
           "stage": "exfiltration",
-          "action": "Exfiltrate through encrypted command channel",
-=======
-          "stage_color": "#991b1b"
-        },
-        {
-          "stage": "exfiltration",
-          "action": "Exfiltrate via encrypted C2 channel",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
+          "action": "Mass exfiltrate to external storage",
           "target": "net_dmz",
-          "eta_mins": 120,
+          "eta_mins": 60,
           "target_label": "DMZ",
           "stage_label": "Exfiltration",
-<<<<<<< HEAD
           "stage_color": "#7f1d1d",
           "simple_stage": "Data Leaving the System",
           "icon": "upload"
-=======
-          "stage_color": "#7f1d1d"
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
         }
       ]
     },
     {
       "path_id": "PATH-B",
-<<<<<<< HEAD
-      "label": "Phishing Pivot -> Web Server Compromise",
-=======
-      "label": "Phishing Pivot \u2192 Web Server Compromise",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-      "probability": 0.55,
+      "label": "Backup Server Ransomware",
+      "probability": 0.6,
       "steps": [
         {
-          "stage": "execution",
-<<<<<<< HEAD
-          "action": "Run malicious macro or dropper",
-=======
-          "action": "Execute malicious macro / dropper",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "dev_laptop_bob",
-          "eta_mins": 20,
-          "target_label": "Bob's Laptop",
-          "stage_label": "Execution",
-<<<<<<< HEAD
-          "stage_color": "#f97316",
-          "simple_stage": "Malicious Action",
-          "icon": "bolt"
-        },
-        {
-          "stage": "persistence",
-          "action": "Create scheduled task for persistence",
-=======
-          "stage_color": "#f97316"
-        },
-        {
-          "stage": "persistence",
-          "action": "Add scheduled task for persistence",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "dev_laptop_bob",
-          "eta_mins": 35,
-          "target_label": "Bob's Laptop",
-          "stage_label": "Persistence",
-<<<<<<< HEAD
-          "stage_color": "#ef4444",
-          "simple_stage": "Trying to Stay Inside",
-          "icon": "anchor"
-        },
-        {
-          "stage": "lateral_movement",
-          "action": "Pivot to web server with reused credentials",
-=======
-          "stage_color": "#ef4444"
-        },
-        {
-          "stage": "lateral_movement",
-          "action": "Pivot to Web Server via SSH key",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "srv_web",
-          "eta_mins": 50,
-          "target_label": "Web Server",
-          "stage_label": "Lateral Movement",
-<<<<<<< HEAD
-          "stage_color": "#b91c1c",
-          "simple_stage": "Moving Across Systems",
-          "icon": "route"
-        },
-        {
-          "stage": "collection",
-          "action": "Harvest customer database credentials",
-=======
-          "stage_color": "#b91c1c"
-        },
-        {
-          "stage": "collection",
-          "action": "Harvest customer DB credentials",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "db_customer",
-          "eta_mins": 80,
-          "target_label": "Customer DB",
-          "stage_label": "Collection",
-<<<<<<< HEAD
-          "stage_color": "#991b1b",
-          "simple_stage": "Gathering Sensitive Data",
-          "icon": "database"
-        },
-        {
-          "stage": "exfiltration",
-          "action": "Bulk export customer records",
-=======
-          "stage_color": "#991b1b"
-        },
-        {
-          "stage": "exfiltration",
-          "action": "Bulk-export customer records",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "db_customer",
-          "eta_mins": 100,
-          "target_label": "Customer DB",
-          "stage_label": "Exfiltration",
-<<<<<<< HEAD
-          "stage_color": "#7f1d1d",
-          "simple_stage": "Data Leaving the System",
-          "icon": "upload"
-=======
-          "stage_color": "#7f1d1d"
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-        }
-      ]
-    },
-    {
-      "path_id": "PATH-C",
-<<<<<<< HEAD
-      "label": "Stealth Persistence -> Finance DB Theft",
-=======
-      "label": "Stealth Persistence \u2192 Finance DB Theft",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-      "probability": 0.38,
-      "steps": [
-        {
-          "stage": "persistence",
-<<<<<<< HEAD
-          "action": "Implant memory injector",
-=======
-          "action": "Implant LSASS memory injector",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "dev_workstation",
-          "eta_mins": 25,
-          "target_label": "Finance Workstation",
-          "stage_label": "Persistence",
-<<<<<<< HEAD
-          "stage_color": "#ef4444",
-          "simple_stage": "Trying to Stay Inside",
-          "icon": "anchor"
-        },
-        {
           "stage": "privilege_escalation",
-          "action": "Exploit local privilege weakness",
-=======
-          "stage_color": "#ef4444"
-        },
-        {
-          "stage": "privilege_escalation",
-          "action": "Exploit unpatched Windows service (LPE)",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "dev_workstation",
-          "eta_mins": 40,
-          "target_label": "Finance Workstation",
+          "action": "Gain backup operator rights",
+          "target": "srv_backup",
+          "eta_mins": 15,
+          "target_label": "Backup Server",
           "stage_label": "Privilege Escalation",
-<<<<<<< HEAD
           "stage_color": "#dc2626",
           "simple_stage": "Admin Control Attempt",
           "icon": "shield"
         },
         {
-          "stage": "lateral_movement",
-          "action": "Move to finance workstation",
-=======
-          "stage_color": "#dc2626"
-        },
-        {
-          "stage": "lateral_movement",
-          "action": "Move laterally to Finance workstation",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "dev_workstation",
-          "eta_mins": 55,
-          "target_label": "Finance Workstation",
-          "stage_label": "Lateral Movement",
-<<<<<<< HEAD
-          "stage_color": "#b91c1c",
-          "simple_stage": "Moving Across Systems",
-          "icon": "route"
-        },
-        {
           "stage": "collection",
-          "action": "Stage finance records to temp storage",
-=======
-          "stage_color": "#b91c1c"
-        },
-        {
-          "stage": "collection",
-          "action": "Stage Finance DB records to temp folder",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "db_finance",
-          "eta_mins": 85,
-          "target_label": "Finance DB",
+          "action": "Map critical backup sets",
+          "target": "srv_backup",
+          "eta_mins": 25,
+          "target_label": "Backup Server",
           "stage_label": "Collection",
-<<<<<<< HEAD
           "stage_color": "#991b1b",
           "simple_stage": "Gathering Sensitive Data",
           "icon": "database"
         },
         {
           "stage": "exfiltration",
-          "action": "Exfiltrate through DNS tunneling",
-=======
-          "stage_color": "#991b1b"
-        },
-        {
-          "stage": "exfiltration",
-          "action": "Exfiltrate via DNS tunneling",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
-          "target": "net_dmz",
-          "eta_mins": 110,
-          "target_label": "DMZ",
+          "action": "Encrypt backup systems with ransomware",
+          "target": "srv_backup",
+          "eta_mins": 45,
+          "target_label": "Backup Server",
           "stage_label": "Exfiltration",
-<<<<<<< HEAD
           "stage_color": "#7f1d1d",
           "simple_stage": "Data Leaving the System",
           "icon": "upload"
-=======
-          "stage_color": "#7f1d1d"
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
         }
       ]
     }
   ],
-<<<<<<< HEAD
   "predictions": [
     {
-      "title": "Malicious Action",
-      "technical_title": "Credential Harvesting -> Lateral Movement",
-      "probability": 0.72,
+      "title": "Admin Control Attempt",
+      "technical_title": "AD Compromise -> Full Domain Takeover",
+      "probability": 0.8,
       "impact": "Critical",
-      "time_window": "Within 15 minutes",
-      "description": "The attacker may target Alice's Laptop next.",
+      "time_window": "Within 10 minutes",
+      "description": "The attacker may target Active Directory next.",
       "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
-      "next_action": "Review activity around Alice's Laptop and prepare containment."
+      "next_action": "Review activity around Active Directory and prepare containment."
     },
     {
-      "title": "Malicious Action",
-      "technical_title": "Phishing Pivot -> Web Server Compromise",
-      "probability": 0.55,
+      "title": "Admin Control Attempt",
+      "technical_title": "Backup Server Ransomware",
+      "probability": 0.6,
       "impact": "High",
-      "time_window": "Within 20 minutes",
-      "description": "The attacker may target Bob's Laptop next.",
+      "time_window": "Within 15 minutes",
+      "description": "The attacker may target Backup Server next.",
       "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
-      "next_action": "Review activity around Bob's Laptop and prepare containment."
-    },
-    {
-      "title": "Trying to Stay Inside",
-      "technical_title": "Stealth Persistence -> Finance DB Theft",
-      "probability": 0.38,
-      "impact": "Medium",
-      "time_window": "Within 25 minutes",
-      "description": "The attacker may target Finance Workstation next.",
-      "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
-      "next_action": "Review activity around Finance Workstation and prepare containment."
+      "next_action": "Review activity around Backup Server and prepare containment."
     }
   ],
   "prediction_cards": [
     {
-      "title": "Malicious Action",
-      "technical_title": "Credential Harvesting -> Lateral Movement",
-      "probability": 0.72,
+      "title": "Admin Control Attempt",
+      "technical_title": "AD Compromise -> Full Domain Takeover",
+      "probability": 0.8,
       "impact": "Critical",
-      "time_window": "Within 15 minutes",
-      "description": "The attacker may target Alice's Laptop next.",
+      "time_window": "Within 10 minutes",
+      "description": "The attacker may target Active Directory next.",
       "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
-      "next_action": "Review activity around Alice's Laptop and prepare containment."
+      "next_action": "Review activity around Active Directory and prepare containment."
     },
     {
-      "title": "Malicious Action",
-      "technical_title": "Phishing Pivot -> Web Server Compromise",
-      "probability": 0.55,
+      "title": "Admin Control Attempt",
+      "technical_title": "Backup Server Ransomware",
+      "probability": 0.6,
       "impact": "High",
-      "time_window": "Within 20 minutes",
-      "description": "The attacker may target Bob's Laptop next.",
+      "time_window": "Within 15 minutes",
+      "description": "The attacker may target Backup Server next.",
       "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
-      "next_action": "Review activity around Bob's Laptop and prepare containment."
-    },
-    {
-      "title": "Trying to Stay Inside",
-      "technical_title": "Stealth Persistence -> Finance DB Theft",
-      "probability": 0.38,
-      "impact": "Medium",
-      "time_window": "Within 25 minutes",
-      "description": "The attacker may target Finance Workstation next.",
-      "why": "This route appears consistently in the twin simulation and matches the current incident pattern.",
-      "next_action": "Review activity around Finance Workstation and prepare containment."
+      "next_action": "Review activity around Backup Server and prepare containment."
     }
   ],
-  "explanation": "TwinShield detected suspicious login behavior. The most likely next route is Credential Harvesting -> Lateral Movement with a 72% likelihood. The first follow-up move could happen in about 15 minutes, so early action matters.",
-  "plain_english": "TwinShield detected suspicious login behavior. The most likely next route is Credential Harvesting -> Lateral Movement with a 72% likelihood. The first follow-up move could happen in about 15 minutes, so early action matters.",
+  "explanation": "TwinShield detected moving across systems behavior. The most likely next route is AD Compromise -> Full Domain Takeover with a 80% likelihood. The first follow-up move could happen in about 10 minutes, so early action matters.",
+  "plain_english": "TwinShield detected moving across systems behavior. The most likely next route is AD Compromise -> Full Domain Takeover with a 80% likelihood. The first follow-up move could happen in about 10 minutes, so early action matters.",
   "story_mode": {
     "headline": "Here is the incident in plain language.",
-    "narrative": "An unusual event involving Alice was detected on Alice's Laptop. TwinShield believes this incident is in the suspicious login phase. The attacker may next attempt malicious action against Alice's Laptop in about 15 minutes. If that succeeds, the path could continue toward trying to stay inside.",
+    "narrative": "An unusual event involving Service Account was detected on App Server. TwinShield believes this incident is in the moving across systems phase. The attacker may next attempt admin control attempt against Active Directory in about 10 minutes. If that succeeds, the path could continue toward gathering sensitive data.",
     "chapters": [
       {
         "title": "How it started",
-        "text": "Multiple failed login attempts followed by a successful login from an unusual location."
+        "text": "An internal account attempted remote access across multiple servers in quick succession."
       },
       {
         "title": "What we are seeing now",
-        "text": "TwinShield believes this incident is in the suspicious login phase."
+        "text": "TwinShield believes this incident is in the moving across systems phase."
       },
       {
         "title": "What may happen next",
-        "text": "The attacker may next attempt malicious action against Alice's Laptop in about 15 minutes."
+        "text": "The attacker may next attempt admin control attempt against Active Directory in about 10 minutes."
       },
       {
         "title": "Why it matters",
-        "text": "If that succeeds, the path could continue toward trying to stay inside."
+        "text": "If that succeeds, the path could continue toward gathering sensitive data."
       }
     ]
   },
   "simplified_terms": [
-    {
-      "term": "Initial Access",
-      "plain_english": "Suspicious Login",
-      "analogy": "Like someone getting through the front door with a suspicious badge swipe."
-    },
-    {
-      "term": "Execution",
-      "plain_english": "Malicious Action",
-      "analogy": "Like a hidden tool being unpacked after someone gets inside."
-    },
-    {
-      "term": "Persistence",
-      "plain_english": "Trying to Stay Inside",
-      "analogy": "Like leaving a spare key behind so they can return later."
-    },
     {
       "term": "Privilege Escalation",
       "plain_english": "Admin Control Attempt",
@@ -590,24 +220,18 @@
       "analogy": "Like carrying documents out of the building."
     }
   ],
-=======
-  "plain_english": "We detected suspicious activity consistent with Initial Access. The most likely follow-on attack (72% chance) is: \"Credential Harvesting \u2192 Lateral Movement\". The attacker could complete this chain in as little as 15 minutes. Immediate action is recommended.",
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342
   "recommended_actions": [
     "Isolate the affected device from the network immediately.",
     "Reset credentials for all accounts that accessed this device.",
-    "Enable MFA on all privileged accounts if not already active."
-<<<<<<< HEAD
+    "Enable MFA on all privileged accounts if not already active.",
+    "Block SMB and RDP from workstations to servers.",
+    "Audit Active Directory for new admin accounts."
   ],
   "simulation_summary": {
-    "paths_tested": 3,
+    "paths_tested": 2,
     "high_risk_paths": 2,
-    "confidence_score": 84,
-    "time_to_next_move": 15,
+    "confidence_score": 92,
+    "time_to_next_move": 10,
     "assets_modeled": 15
   }
 }
-=======
-  ]
-}
->>>>>>> fbfa6c73df652ef448eaa2b8b7c5810248386342

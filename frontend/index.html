@@ -3,19 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TwinShield - Guided Cyber Dashboard</title>
+  <title>TwinShield - Simulation Workspace</title>
   <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
   <div class="page-shell">
     <header class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Unified Cyber Alert | Digital Twin Simulation | Guided Assistant</p>
-        <h1>TwinShield</h1>
-        <p class="hero-text">A calm, easy-to-follow security dashboard that shows how an attack may unfold, what could happen next, and what action to take first.</p>
+        <p class="eyebrow">TwinShield | Digital Twin Incident Simulation</p>
+        <h1>Simulation Workspace</h1>
+        <p class="hero-text">A guided security environment that constructs a safe incident simulation step by step, shows likely attacker movement, and explains the risk in plain English.</p>
+        <div class="hero-inline">
+          <span class="status-pill">Monitoring Active</span>
+          <span class="hero-note">Safe virtual environment. No real attack actions are performed.</span>
+        </div>
       </div>
       <div class="hero-actions">
-        <span class="status-pill">Monitoring Active</span>
+        <label class="input-label" for="scenarioSelect">Simulation Scenario</label>
         <select id="scenarioSelect" class="input">
           <option value="suspicious_login">Compromised Employee Account</option>
           <option value="lateral_movement">Internal Movement Detected</option>
@@ -25,26 +29,65 @@
       </div>
     </header>
 
-    <section class="headline-strip">
-      <div class="headline-card">
-        <span class="mini-label">Unified Notification</span>
-        <strong>Alert sent</strong>
-        <p>Suspicious behavior was detected and routed into a guided response view.</p>
+    <section class="simulation-board">
+      <div class="board-header">
+        <div>
+          <p class="panel-eyebrow">Live incident build</p>
+          <h2>Digital Twin Construction View</h2>
+        </div>
+        <div class="board-pills">
+          <span class="board-pill">Alert Correlation</span>
+          <span class="board-pill">Path Testing</span>
+          <span class="board-pill">Prediction Engine</span>
+        </div>
       </div>
-      <div class="headline-card">
-        <span class="mini-label">What this shows</span>
-        <strong>Attack path and likely next steps</strong>
-        <p>See the incident as a simple journey instead of reading raw security logs.</p>
-      </div>
-      <div class="headline-card">
-        <span class="mini-label">Why it matters</span>
-        <strong>Act early</strong>
-        <p>TwinShield tests possible attacker movement inside a safe digital twin first.</p>
+      <div class="board-grid">
+        <section class="board-panel board-panel-primary">
+          <div class="construct-panel">
+            <div class="construct-copy">
+              <span class="mini-label">Unified Alert</span>
+              <h3 id="sceneTitle">Awaiting simulation start</h3>
+              <p id="sceneNarrative">TwinShield will correlate suspicious signals, construct an attack path, and project likely movement through the virtual environment.</p>
+            </div>
+            <div class="construct-shell">
+              <div class="construct-stage">
+                <div class="construct-ring"></div>
+                <div class="construct-core">
+                  <span id="sceneStageCode">TS</span>
+                </div>
+              </div>
+              <div class="construct-lines">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="board-panel">
+          <span class="mini-label">Simulation Signals</span>
+          <div id="liveFeed" class="live-feed"></div>
+        </section>
+        <section class="board-panel">
+          <span class="mini-label">Risk Escalation</span>
+          <div class="risk-meter">
+            <div class="risk-track">
+              <div id="riskMeterFill" class="risk-meter-fill"></div>
+            </div>
+            <div class="risk-meta">
+              <strong id="riskMeterLabel">Waiting</strong>
+              <span id="riskMeterScore">0.0 / 10</span>
+            </div>
+          </div>
+          <div id="simulationPulse" class="pulse-card">
+            No simulation activity yet.
+          </div>
+        </section>
       </div>
     </section>
 
     <main class="dashboard-grid">
-      <section class="panel span-8">
+      <section class="panel span-12">
         <div class="panel-header">
           <div>
             <p class="panel-eyebrow">Built for fast understanding</p>
@@ -54,35 +97,12 @@
         <div id="snapshotCards" class="snapshot-grid"></div>
       </section>
 
-      <section class="panel span-4">
-        <div class="panel-header">
-          <div>
-            <p class="panel-eyebrow">Live demo state</p>
-            <h2>System Status</h2>
-          </div>
-        </div>
-        <div id="loadingMessage" class="info-banner" hidden>Scanning live activity...</div>
-        <div id="errorMessage" class="error-banner" hidden>We could not complete the simulation. Please try again.</div>
-        <div class="metric-stack">
-          <div class="metric-card">
-            <span class="mini-label">Action</span>
-            <strong>Run Simulation</strong>
-            <p>Starts a guided incident walkthrough and updates the dashboard.</p>
-          </div>
-          <div class="metric-card">
-            <span class="mini-label">Demo Mode</span>
-            <strong>Judge-friendly flow</strong>
-            <p>Clear language, simple visuals, and a steady presentation rhythm.</p>
-          </div>
-        </div>
-      </section>
-
       <section class="panel span-8">
         <div class="panel-header">
           <div>
             <p class="panel-eyebrow">Gamified attack timeline</p>
             <h2>Attack Levels</h2>
-            <p class="section-helper">Each stage appears like a level. The active level is highlighted. Future levels show where the threat may go next.</p>
+            <p class="section-helper">Each level represents one constructed stage of the simulated incident path.</p>
           </div>
         </div>
         <div id="timeline" class="timeline-grid"></div>
@@ -91,11 +111,12 @@
       <section class="panel span-4">
         <div class="panel-header">
           <div>
-            <p class="panel-eyebrow">Digital twin simulation</p>
-            <h2>Simulation Engine</h2>
-            <p class="section-helper">TwinShield safely tests attacker routes inside a virtual model of the environment.</p>
+            <p class="panel-eyebrow">Live demo state</p>
+            <h2>Simulation Status</h2>
           </div>
         </div>
+        <div id="loadingMessage" class="info-banner" hidden>Scanning live activity...</div>
+        <div id="errorMessage" class="error-banner" hidden>We could not complete the simulation. Please try again.</div>
         <div id="simulationSummary" class="metric-stack"></div>
       </section>
 
@@ -104,7 +125,7 @@
           <div>
             <p class="panel-eyebrow">Prediction panel</p>
             <h2>What May Happen Next</h2>
-            <p class="section-helper">Likely outcomes ranked by probability and possible impact.</p>
+            <p class="section-helper">Likely future routes ranked by probability, impact, and containment priority.</p>
           </div>
         </div>
         <div id="predictions" class="prediction-grid"></div>
@@ -115,7 +136,7 @@
           <div>
             <p class="panel-eyebrow">Story mode</p>
             <h2>Simple Explanation</h2>
-            <p class="section-helper">A plain-language summary of the incident and why it matters.</p>
+            <p class="section-helper">A plain-language summary of what the simulation is constructing right now.</p>
           </div>
         </div>
         <div id="storyMode" class="story-stack"></div>
