@@ -1,1 +1,233 @@
-
+{
+  "incident_type": "Suspicious Login",
+  "severity": "high",
+  "current_stage": "initial_access",
+  "current_stage_label": "Initial Access",
+  "source_asset": "dev_laptop_alice",
+  "affected_user": "alice",
+  "timestamp": "2026-04-10T06:43:35.492638Z",
+  "timeline": [
+    {
+      "time": "2026-04-10T06:43:35.492574Z",
+      "stage": "initial_access",
+      "label": "Initial Access",
+      "event": "Multiple failed login attempts followed by successful login from unusual location",
+      "source": "185.220.101.47"
+    },
+    {
+      "time": "2026-04-10T06:58:35.492574Z",
+      "stage": "execution",
+      "label": "Execution",
+      "event": "Deploy credential dumper (Mimikatz-style)",
+      "target": "dev_laptop_alice"
+    },
+    {
+      "time": "2026-04-10T07:13:35.492574Z",
+      "stage": "persistence",
+      "label": "Persistence",
+      "event": "Install reverse shell backdoor",
+      "target": "dev_laptop_alice"
+    },
+    {
+      "time": "2026-04-10T07:28:35.492574Z",
+      "stage": "privilege_escalation",
+      "label": "Privilege Escalation",
+      "event": "Exploit local admin token",
+      "target": "srv_ad"
+    },
+    {
+      "time": "2026-04-10T07:43:35.492574Z",
+      "stage": "lateral_movement",
+      "label": "Lateral Movement",
+      "event": "Pass-the-Hash to Active Directory",
+      "target": "srv_ad"
+    },
+    {
+      "time": "2026-04-10T08:13:35.492574Z",
+      "stage": "collection",
+      "label": "Collection",
+      "event": "Enumerate and stage sensitive data",
+      "target": "db_finance"
+    },
+    {
+      "time": "2026-04-10T08:43:35.492574Z",
+      "stage": "exfiltration",
+      "label": "Exfiltration",
+      "event": "Exfiltrate via encrypted C2 channel",
+      "target": "net_dmz"
+    }
+  ],
+  "attack_paths": [
+    {
+      "path_id": "PATH-A",
+      "label": "Credential Harvesting \u2192 Lateral Movement",
+      "probability": 0.72,
+      "steps": [
+        {
+          "stage": "execution",
+          "action": "Deploy credential dumper (Mimikatz-style)",
+          "target": "dev_laptop_alice",
+          "eta_mins": 15,
+          "target_label": "Alice's Laptop",
+          "stage_label": "Execution",
+          "stage_color": "#f97316"
+        },
+        {
+          "stage": "persistence",
+          "action": "Install reverse shell backdoor",
+          "target": "dev_laptop_alice",
+          "eta_mins": 30,
+          "target_label": "Alice's Laptop",
+          "stage_label": "Persistence",
+          "stage_color": "#ef4444"
+        },
+        {
+          "stage": "privilege_escalation",
+          "action": "Exploit local admin token",
+          "target": "srv_ad",
+          "eta_mins": 45,
+          "target_label": "Active Directory",
+          "stage_label": "Privilege Escalation",
+          "stage_color": "#dc2626"
+        },
+        {
+          "stage": "lateral_movement",
+          "action": "Pass-the-Hash to Active Directory",
+          "target": "srv_ad",
+          "eta_mins": 60,
+          "target_label": "Active Directory",
+          "stage_label": "Lateral Movement",
+          "stage_color": "#b91c1c"
+        },
+        {
+          "stage": "collection",
+          "action": "Enumerate and stage sensitive data",
+          "target": "db_finance",
+          "eta_mins": 90,
+          "target_label": "Finance DB",
+          "stage_label": "Collection",
+          "stage_color": "#991b1b"
+        },
+        {
+          "stage": "exfiltration",
+          "action": "Exfiltrate via encrypted C2 channel",
+          "target": "net_dmz",
+          "eta_mins": 120,
+          "target_label": "DMZ",
+          "stage_label": "Exfiltration",
+          "stage_color": "#7f1d1d"
+        }
+      ]
+    },
+    {
+      "path_id": "PATH-B",
+      "label": "Phishing Pivot \u2192 Web Server Compromise",
+      "probability": 0.55,
+      "steps": [
+        {
+          "stage": "execution",
+          "action": "Execute malicious macro / dropper",
+          "target": "dev_laptop_bob",
+          "eta_mins": 20,
+          "target_label": "Bob's Laptop",
+          "stage_label": "Execution",
+          "stage_color": "#f97316"
+        },
+        {
+          "stage": "persistence",
+          "action": "Add scheduled task for persistence",
+          "target": "dev_laptop_bob",
+          "eta_mins": 35,
+          "target_label": "Bob's Laptop",
+          "stage_label": "Persistence",
+          "stage_color": "#ef4444"
+        },
+        {
+          "stage": "lateral_movement",
+          "action": "Pivot to Web Server via SSH key",
+          "target": "srv_web",
+          "eta_mins": 50,
+          "target_label": "Web Server",
+          "stage_label": "Lateral Movement",
+          "stage_color": "#b91c1c"
+        },
+        {
+          "stage": "collection",
+          "action": "Harvest customer DB credentials",
+          "target": "db_customer",
+          "eta_mins": 80,
+          "target_label": "Customer DB",
+          "stage_label": "Collection",
+          "stage_color": "#991b1b"
+        },
+        {
+          "stage": "exfiltration",
+          "action": "Bulk-export customer records",
+          "target": "db_customer",
+          "eta_mins": 100,
+          "target_label": "Customer DB",
+          "stage_label": "Exfiltration",
+          "stage_color": "#7f1d1d"
+        }
+      ]
+    },
+    {
+      "path_id": "PATH-C",
+      "label": "Stealth Persistence \u2192 Finance DB Theft",
+      "probability": 0.38,
+      "steps": [
+        {
+          "stage": "persistence",
+          "action": "Implant LSASS memory injector",
+          "target": "dev_workstation",
+          "eta_mins": 25,
+          "target_label": "Finance Workstation",
+          "stage_label": "Persistence",
+          "stage_color": "#ef4444"
+        },
+        {
+          "stage": "privilege_escalation",
+          "action": "Exploit unpatched Windows service (LPE)",
+          "target": "dev_workstation",
+          "eta_mins": 40,
+          "target_label": "Finance Workstation",
+          "stage_label": "Privilege Escalation",
+          "stage_color": "#dc2626"
+        },
+        {
+          "stage": "lateral_movement",
+          "action": "Move laterally to Finance workstation",
+          "target": "dev_workstation",
+          "eta_mins": 55,
+          "target_label": "Finance Workstation",
+          "stage_label": "Lateral Movement",
+          "stage_color": "#b91c1c"
+        },
+        {
+          "stage": "collection",
+          "action": "Stage Finance DB records to temp folder",
+          "target": "db_finance",
+          "eta_mins": 85,
+          "target_label": "Finance DB",
+          "stage_label": "Collection",
+          "stage_color": "#991b1b"
+        },
+        {
+          "stage": "exfiltration",
+          "action": "Exfiltrate via DNS tunneling",
+          "target": "net_dmz",
+          "eta_mins": 110,
+          "target_label": "DMZ",
+          "stage_label": "Exfiltration",
+          "stage_color": "#7f1d1d"
+        }
+      ]
+    }
+  ],
+  "plain_english": "We detected suspicious activity consistent with Initial Access. The most likely follow-on attack (72% chance) is: \"Credential Harvesting \u2192 Lateral Movement\". The attacker could complete this chain in as little as 15 minutes. Immediate action is recommended.",
+  "recommended_actions": [
+    "Isolate the affected device from the network immediately.",
+    "Reset credentials for all accounts that accessed this device.",
+    "Enable MFA on all privileged accounts if not already active."
+  ]
+}
