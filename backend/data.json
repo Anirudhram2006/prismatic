@@ -1,1 +1,14 @@
-
+{
+  "type": "Suspicious Login",
+  "event": "Multiple failed login attempts followed by successful login from unusual location",
+  "severity": "high",
+  "user": "alice",
+  "device": "dev_laptop_alice",
+  "source_ip": "185.220.101.47",
+  "destination_ip": "10.0.1.30",
+  "timestamp": "2024-07-15T03:42:11Z",
+  "geo_location": "Unknown / Tor Exit Node",
+  "failed_attempts": 14,
+  "user_agent": "python-requests/2.31.0",
+  "tags": ["brute-force", "off-hours", "tor-exit"]
+}
